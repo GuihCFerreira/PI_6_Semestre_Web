@@ -1,24 +1,38 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
+import QuizPage from "./pages/Quiz";
+import Recommendation from "./pages/Recommendation";
+import { useAuth } from "./services/AuthContext";
 
-const App = () => {
+const AppRoutes = () => {
+  const { token } = useAuth();
+
   return (
-    <Router>
-      <Routes>
-        {/* Rotas públicas */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/cadastro" element={<Cadastro />} />
+    <Routes>
+      {/* Redirecionamento automático com base na autenticação */}
+      <Route path="/" element={<Navigate to={token ? "/profile" : "/login"} />} />
 
-        {/* Rotas privadas */}
-        <Route element={<PrivateRoute />}>
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-      </Routes>
-    </Router>
+      {/* Rotas públicas */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/cadastro" element={<Cadastro />} />
+
+      {/* Rotas privadas */}
+      <Route element={<PrivateRoute />}>
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/recommendation" element={<Recommendation />} />
+      </Route>
+    </Routes>
   );
 };
+
+const App = () => (
+  <Router>
+    <AppRoutes />
+  </Router>
+);
 
 export default App;
