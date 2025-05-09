@@ -1,17 +1,24 @@
-// src/App.tsx
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import UserProfile from './pages/UserProfile';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Cadastro from "./pages/Cadastro";
+import Profile from "./pages/Profile";
+import PrivateRoute from "./components/PrivateRoute";
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/profile" element={<UserProfile />} />
+        {/* Rotas públicas */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/cadastro" element={<Cadastro />} />
+
+        {/* Rotas privadas */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/profile" element={<Profile />} />
+        </Route>
       </Routes>
     </Router>
   );
-}
+};
 
 export default App;

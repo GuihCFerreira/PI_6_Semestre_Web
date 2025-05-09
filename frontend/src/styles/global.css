@@ -1,0 +1,22 @@
+:root {
+    --color-primary: #2C003E;
+    --color-secondary: #59B2FF;
+    --color-background: #FCFCFC;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-primary);
+  }
+  
+  input, button {
+    font-family: inherit;
+  }
+  

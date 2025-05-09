@@ -9,16 +9,21 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "noEmit": true,
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Outras opções */
+    "composite": true,  // Necessário para referenciar este tsconfig de outros
+    "noEmit": true  // Impede a geração de arquivos no desenvolvimento
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts"],  // Configuração do Vite ou arquivos relevantes do seu projeto
+  "exclude": ["node_modules"]  // Excluir node_modules para evitar que sejam analisados
 }
