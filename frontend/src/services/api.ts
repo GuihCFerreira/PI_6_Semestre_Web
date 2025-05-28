@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Criação da instância do Axios com a URL base da sua API
 const api = axios.create({
-  baseURL: "https://pi-6-semestre-1edb53abee65.herokuapp.com",
+  baseURL: "https://iplay-dte2ffd6aghdd2cx.brazilsouth-01.azurewebsites.net",
 });
 
 // Interceptor para incluir o token JWT em todas as requisições privadas

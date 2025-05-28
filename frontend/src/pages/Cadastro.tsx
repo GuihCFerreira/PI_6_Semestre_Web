@@ -15,7 +15,7 @@ const Cadastro = () => {
 
     try {
       const response = await axios.post(
-        "https://pi-6-semestre-1edb53abee65.herokuapp.com/sign-in",
+        "https://iplay-dte2ffd6aghdd2cx.brazilsouth-01.azurewebsites.net/sign-in",
         {
           name,
           email,

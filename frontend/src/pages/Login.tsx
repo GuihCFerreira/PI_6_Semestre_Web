@@ -15,10 +15,15 @@ const Login = () => {
     try {
       await login(email, password); // Use a função login do contexto
       navigate("/recommendation"); // Redireciona para a tela de recomendação após login
-    } catch (error) {
-      setErrorMessage("Erro ao fazer login. Verifique os dados e tente novamente.");
+    } catch (error: any) {
+      console.error("Erro no login:", error?.response?.data || error.message);
+      setErrorMessage(
+        error?.response?.data?.message || "Erro ao fazer login. Verifique os dados e tente novamente."
+      );
     }
+
   };
+
 
   return (
     <div className="auth-container">

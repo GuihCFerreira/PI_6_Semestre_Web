@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const API_URL = "https://pi-6-semestre-1edb53abee65.herokuapp.com/quiz";
+const API_URL = "https://iplay-dte2ffd6aghdd2cx.brazilsouth-01.azurewebsites.net/quiz";
 
 const QuizForm: React.FC = () => {
   const [formData, setFormData] = useState({

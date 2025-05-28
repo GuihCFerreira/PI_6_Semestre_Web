@@ -23,7 +23,7 @@ export const RecommendationProvider = ({ children }: { children: React.ReactNode
 
   const fetchRecommendations = async () => {
     try {
-      const response = await fetch('https://pi-6-semestre-1edb53abee65.herokuapp.com/recommendation');
+      const response = await fetch('https://iplay-dte2ffd6aghdd2cx.brazilsouth-01.azurewebsites.net/recommendation');
       if (!response.ok) {
         throw new Error('Erro ao buscar recomendações');
       }

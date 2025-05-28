@@ -19,7 +19,7 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "https://pi-6-semestre-1edb53abee65.herokuapp.com/user/1", // Substitua 1 pelo id correto
+          "https://iplay-dte2ffd6aghdd2cx.brazilsouth-01.azurewebsites.net/user/1", // Substitua 1 pelo id correto
           {
             headers: {
               Authorization: `Bearer ${token}`,
