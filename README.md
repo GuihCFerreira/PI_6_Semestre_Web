@@ -5,7 +5,16 @@ cd frontend
 npm install
 npm install react-router-dom axios jwt-decode
 npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p'
+npx tailwindcss init -p
+
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+
+npx shadcn@latest init
+npx shadcn@latest add card button radio-group checkbox scroll-area
+npm install lucide-react
+npm install clsx
 
 
 

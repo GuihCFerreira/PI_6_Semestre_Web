@@ -20,12 +20,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [user, setUser] = useState<any>(null);
 
-  useEffect(() => {
-    if (token) {
+useEffect(() => {
+  if (token) {
+    try {
       const decoded: any = jwtDecode(token);
-      setUser(decoded);
+
+      // Opcional: verificar se o token expirou aqui
+      const currentTime = Date.now() / 1000;
+      if (decoded.exp < currentTime) {
+        // Token expirado, limpa estado
+        setToken(null);
+        setUser(null);
+        localStorage.removeItem("token");
+      } else {
+        setUser(decoded);
+      }
+    } catch (error) {
+      console.error("Token inválido:", error);
+      setToken(null);
+      setUser(null);
+      localStorage.removeItem("token");
     }
-  }, [token]);
+  } else {
+    setUser(null);
+  }
+}, [token]);
+
 
 const login = async (email: string, password: string) => {
   try {
@@ -40,13 +60,12 @@ const login = async (email: string, password: string) => {
     setToken(token);
     localStorage.setItem("token", token);
 
-    const decoded: any = jwtDecode(token);
-    setUser({
-      id: response.data.id,
-      name: response.data.name,
-      email: response.data.email,
-      ...decoded, // caso queira os campos do token
-    });
+    try {
+      const decoded: any = jwtDecode(token);
+      setUser(decoded);
+    } catch {
+      setUser(null);
+    }
 
   } catch (error: any) {
     console.error("Erro ao fazer login:", error?.response?.data || error.message);

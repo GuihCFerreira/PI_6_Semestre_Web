@@ -3,7 +3,7 @@ import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
-import QuizPage from "./pages/Quiz";
+import Quiz from "./pages/Quiz";
 import Recommendation from "./pages/Recommendation";
 import { useAuth } from "./services/AuthContext";
 
@@ -22,7 +22,7 @@ const AppRoutes = () => {
       {/* Rotas privadas */}
       <Route element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
-        <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/quiz" element={<Quiz />} />
         <Route path="/recommendation" element={<Recommendation />} />
       </Route>
     </Routes>
