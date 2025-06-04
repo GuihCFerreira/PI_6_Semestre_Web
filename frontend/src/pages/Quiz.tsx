@@ -73,7 +73,7 @@ const Quiz: React.FC = () => {
     try {
       await api.post('/quiz', answers);
       alert('Quiz enviado com sucesso!');
-      navigate('/recomendacoes'); // redireciona após o envio
+      navigate('/recommendation'); // redireciona após o envio
     } catch (err) {
       console.error('Erro ao enviar quiz:', err);
       alert('Erro ao enviar quiz');
