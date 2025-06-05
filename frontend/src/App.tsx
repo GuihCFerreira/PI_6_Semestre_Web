@@ -7,7 +7,8 @@ import Quiz from "./pages/Quiz";
 import Recommendation from "./pages/Recommendation";
 import { useAuth } from "./services/AuthContext";
 import SidebarLayout from "./components/SidebarLayout";
-
+import GameDetails from "./pages/GameDetails";
+import FavoriteGamesPage from "./pages/FavoriteGamesPage";
 const AppRoutes = () => {
   const { token } = useAuth();
 
@@ -30,6 +31,24 @@ const AppRoutes = () => {
             </SidebarLayout>
           }
         />
+        <Route 
+          path="/game/:id" 
+          element={
+            <SidebarLayout>
+              <GameDetails />
+            </SidebarLayout>
+          } 
+        />
+
+        <Route 
+          path="/favorites" 
+          element={
+            <SidebarLayout>
+              <FavoriteGamesPage />
+            </SidebarLayout>
+          } 
+        />
+
         <Route
           path="/quiz"
           element={

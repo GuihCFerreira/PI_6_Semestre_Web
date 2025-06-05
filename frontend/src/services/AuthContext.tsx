@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       setToken(token);
       localStorage.setItem('token', token);
+      //localStorage.setItem('user_id', response.data.user.id); // 👈 isso é essencial
       setUser({ id: decoded.userId, email: decoded.email });
     } catch (error: any) {
       console.error('Erro ao fazer login:', error?.response?.data || error.message);

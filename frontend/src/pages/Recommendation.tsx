@@ -87,7 +87,7 @@ const Recommendation: React.FC = () => {
               cursor: 'pointer',
               fontWeight: 'bold'
             }}
-            onClick={() => window.open(`https://store.steampowered.com/app/${mainGame.game_id}`, '_blank')}
+            onClick={() => navigate(`/game/${mainGame.game_id}`)}
           >
             Ver Detalhes
           </button>

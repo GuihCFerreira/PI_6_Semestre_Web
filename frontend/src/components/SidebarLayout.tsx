@@ -36,8 +36,8 @@ const SidebarLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         <h2 style={{ marginBottom: 20 }}>🎮 iPlay</h2>
 
         <Link to="/profile" style={navStyle(isActive('/profile'))}>Perfil</Link>
-        <Link to="/quiz" style={navStyle(isActive('/quiz'))}>Quiz</Link>
         <Link to="/recommendation" style={navStyle(isActive('/recommendation'))}>Recomendações</Link>
+        <Link to="/favorites" style={navStyle(isActive('/favorites'))}>Favoritos</Link>
 
         <button
           onClick={logout}
