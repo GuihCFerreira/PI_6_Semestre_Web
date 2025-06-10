@@ -9,6 +9,7 @@ import { useAuth } from "./services/AuthContext";
 import SidebarLayout from "./components/SidebarLayout";
 import GameDetails from "./pages/GameDetails";
 import FavoriteGamesPage from "./pages/FavoriteGamesPage";
+
 const AppRoutes = () => {
   const { token } = useAuth();
 
@@ -71,9 +72,11 @@ const AppRoutes = () => {
 };
 
 const App = () => (
-  <Router>
-    <AppRoutes />
-  </Router>
+  <div style={{ backgroundColor: "#59B2FF", minHeight: "100vh" }}>
+    <Router>
+      <AppRoutes />
+    </Router>
+  </div>
 );
 
 export default App;

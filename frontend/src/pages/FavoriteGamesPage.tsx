@@ -51,22 +51,31 @@ const FavoriteGamesPage = () => {
 
   return (
     <div className="p-6 bg-[#FCFCFC] min-h-screen">
-      <h2 className="text-3xl font-bold text-[#2C003E] mb-6">🎮 Meus Favoritos</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-3xl font-bold text-[#2C003E]">❤️ Meus Favoritos</h2>
+        <button
+          onClick={() => navigate('/')}
+          className="bg-[#59B2FF] text-white px-4 py-2 rounded-xl font-semibold hover:bg-[#479fe0] transition"
+        >
+          Voltar para Início
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {games.map(game => (
           <div
             key={game.id}
-            className="bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer group"
+            className="bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-xl transition-shadow duration-300 group cursor-pointer"
             onClick={() => navigate(`/game/${game.game_id}`)}
           >
             <div className="relative">
               <img
                 src={game.header_image}
                 alt={game.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md">
-                <Heart className="text-red-500 w-5 h-5 fill-red-500" />
+                <Heart className="text-[#ff4d6d] w-5 h-5 fill-[#ff4d6d]" />
               </div>
             </div>
             <div className="p-4">

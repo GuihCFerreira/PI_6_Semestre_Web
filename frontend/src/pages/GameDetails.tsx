@@ -115,21 +115,46 @@ const GameDetails = () => {
           Ver na Steam
         </button>
 
-        <button
-          onClick={handleAddToFavorites}
-          disabled={favorited}
-          style={{
-            backgroundColor: favorited ? 'gray' : '#2C003E',
-            color: 'white',
-            border: 'none',
-            padding: '10px 16px',
-            borderRadius: 8,
-            cursor: favorited ? 'not-allowed' : 'pointer',
-            fontWeight: 'bold'
-          }}
-        >
-          {favorited ? 'Adicionado' : 'Adicionar aos Favoritos'}
-        </button>
+{favorited ? (
+  <button
+    onClick={async () => {
+      if (!game) return;
+      try {
+        await api.delete(`/games/favorite/${game.game_id}`);
+        setFavorited(false);
+      } catch (error) {
+        console.error('Erro ao remover dos favoritos:', error);
+      }
+    }}
+    style={{
+      backgroundColor: '#FF4D4D',
+      color: 'white',
+      border: 'none',
+      padding: '10px 16px',
+      borderRadius: 8,
+      cursor: 'pointer',
+      fontWeight: 'bold'
+    }}
+  >
+    Remover dos Favoritos
+  </button>
+) : (
+  <button
+    onClick={handleAddToFavorites}
+    style={{
+      backgroundColor: '#2C003E',
+      color: 'white',
+      border: 'none',
+      padding: '10px 16px',
+      borderRadius: 8,
+      cursor: 'pointer',
+      fontWeight: 'bold'
+    }}
+  >
+    Adicionar aos Favoritos
+  </button>
+)}
+
       </div>
 
       {/* Screenshots */}
