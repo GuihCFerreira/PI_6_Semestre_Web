@@ -18,6 +18,7 @@ interface GameDetail {
   screenshots: string[];
   tags: string[];
   operational_systems: string[];
+  is_favorite: boolean;
 }
 
 const GameDetails = () => {
@@ -26,25 +27,15 @@ const GameDetails = () => {
   const [game, setGame] = useState<GameDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [favorited, setFavorited] = useState(false);
+  const [favoriteRecordId, setFavoriteRecordId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchGame = async () => {
       try {
-        const res = await api.get(`/games/${id}`);
+        // Busca detalhes do jogo
+        const res = await api.get<GameDetail>(`/games/${id}`);
         setGame(res.data);
-
-        // Verifica se o jogo está nos favoritos
-        try {
-          await api.get(`/games/favorite/${res.data.game_id}`);
-          setFavorited(true);
-        } catch (err: any) {
-          if (err.response && err.response.status === 404) {
-            setFavorited(false); // não está favoritado
-          } else {
-            console.error("Erro ao verificar favoritos:", err);
-          }
-        }
-
+        setFavorited(res.data.is_favorite);
       } catch (error) {
         console.error("Erro ao buscar detalhes do jogo:", error);
       } finally {
@@ -52,8 +43,22 @@ const GameDetails = () => {
       }
     };
 
-    fetchGame();
-  }, [id]);
+    // Buscar também o possível registro do favorito
+    const fetchFavoriteRecord = async () => {
+      if (!id) return;
+      try {
+        const favList = await api.get<any[]>('/games/favorite');
+        const rec = favList.data.find(f => f.game_id === game?.game_id);
+        if (rec) {
+          setFavoriteRecordId(rec.id);
+        }
+      } catch (err) {
+        console.error("Erro ao buscar registros de favoritos:", err);
+      }
+    };
+
+    fetchGame().then(fetchFavoriteRecord);
+  }, [id, game?.game_id]);
 
   const handleAddToFavorites = async () => {
     if (!game) return;
@@ -63,11 +68,24 @@ const GameDetails = () => {
         game_id: game.game_id,
         header_image: game.header_image,
         short_description: game.short_description,
-        release_date: game.release_date.split('T')[0] // Formata para "YYYY-MM-DD"
+        release_date: game.release_date.split('T')[0],
       });
       setFavorited(true);
     } catch (error) {
       console.error('Erro ao adicionar aos favoritos:', error);
+    }
+  };
+
+  const handleRemoveFromFavorites = async () => {
+    if (!favoriteRecordId) {
+      console.error("ID do favorito não encontrado, para remover");
+      return;
+    }
+    try {
+      await api.delete(`/games/favorite/${favoriteRecordId}`);
+      setFavorited(false);
+    } catch (error) {
+      console.error('Erro ao remover dos favoritos:', error);
     }
   };
 
@@ -84,80 +102,32 @@ const GameDetails = () => {
       <p><strong>Idiomas:</strong> {game.supported_languages.join(', ')}</p>
       <p><strong>Tags:</strong> {game.tags.join(', ')}</p>
 
-      {/* Botões */}
       <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
         <button
           onClick={() => navigate('/recommendation')}
-          style={{
-            backgroundColor: '#ccc',
-            border: 'none',
-            padding: '10px 16px',
-            borderRadius: 8,
-            cursor: 'pointer',
-            fontWeight: 'bold'
-          }}
+          style={btnStyle('#ccc')}
         >
           Voltar
         </button>
 
         <button
           onClick={() => window.open(`https://store.steampowered.com/app/${game.game_id}`, '_blank')}
-          style={{
-            backgroundColor: '#59B2FF',
-            color: 'white',
-            border: 'none',
-            padding: '10px 16px',
-            borderRadius: 8,
-            cursor: 'pointer',
-            fontWeight: 'bold'
-          }}
+          style={btnStyle('#59B2FF', 'white')}
         >
           Ver na Steam
         </button>
 
-{favorited ? (
-  <button
-    onClick={async () => {
-      if (!game) return;
-      try {
-        await api.delete(`/games/favorite/${game.game_id}`);
-        setFavorited(false);
-      } catch (error) {
-        console.error('Erro ao remover dos favoritos:', error);
-      }
-    }}
-    style={{
-      backgroundColor: '#FF4D4D',
-      color: 'white',
-      border: 'none',
-      padding: '10px 16px',
-      borderRadius: 8,
-      cursor: 'pointer',
-      fontWeight: 'bold'
-    }}
-  >
-    Remover dos Favoritos
-  </button>
-) : (
-  <button
-    onClick={handleAddToFavorites}
-    style={{
-      backgroundColor: '#2C003E',
-      color: 'white',
-      border: 'none',
-      padding: '10px 16px',
-      borderRadius: 8,
-      cursor: 'pointer',
-      fontWeight: 'bold'
-    }}
-  >
-    Adicionar aos Favoritos
-  </button>
-)}
-
+        {favorited ? (
+          <button onClick={handleRemoveFromFavorites} style={btnStyle('#FF4D4D', 'white')}>
+            Remover dos Favoritos
+          </button>
+        ) : (
+          <button onClick={handleAddToFavorites} style={btnStyle('#2C003E', 'white')}>
+            Adicionar aos Favoritos
+          </button>
+        )}
       </div>
 
-      {/* Screenshots */}
       <div style={{ marginTop: 30 }}>
         <h4>Screenshots</h4>
         <div style={{ display: 'flex', gap: 10, overflowX: 'auto' }}>
@@ -169,5 +139,16 @@ const GameDetails = () => {
     </div>
   );
 };
+
+// Botões em estilo DRY
+const btnStyle = (bg: string, color = 'black'): React.CSSProperties => ({
+  backgroundColor: bg,
+  color,
+  border: 'none',
+  padding: '10px 16px',
+  borderRadius: 8,
+  cursor: 'pointer',
+  fontWeight: 'bold'
+});
 
 export default GameDetails;

@@ -35,57 +35,55 @@ const FavoriteGamesPage = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-full mt-12 text-[#2C003E] font-semibold">
-        Carregando favoritos...
+      <div className="flex justify-center items-center h-full text-[#2C003E] font-semibold text-xl">
+        Carregando seus jogos favoritos...
       </div>
     );
   }
 
   if (games.length === 0) {
     return (
-      <div className="flex justify-center items-center h-full mt-12 text-gray-500">
-        Nenhum jogo favoritado ainda.
+      <div className="flex justify-center items-center h-full text-[#2C003E] text-lg">
+        Você ainda não favoritou nenhum jogo.
       </div>
     );
   }
 
   return (
-    <div className="p-6 bg-[#FCFCFC] min-h-screen">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-3xl font-bold text-[#2C003E]">❤️ Meus Favoritos</h2>
+    <div className="bg-[#FCFCFC] h-full flex flex-col p-6 overflow-hidden">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-[#2C003E]">Seus Jogos Favoritos</h1>
         <button
-          onClick={() => navigate('/')}
-          className="bg-[#59B2FF] text-white px-4 py-2 rounded-xl font-semibold hover:bg-[#479fe0] transition"
+          onClick={() => navigate('/profile')}
+          className="bg-[#59B2FF] hover:bg-[#3a9ee7] text-white font-semibold px-4 py-2 rounded-xl transition"
         >
-          Voltar para Início
+          Voltar para o Perfil
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {games.map(game => (
+      <div className="flex flex-col gap-4 overflow-y-auto pr-2" style={{ maxHeight: 'calc(100vh - 120px)' }}>
+        {games.map((game) => (
           <div
             key={game.id}
-            className="bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-xl transition-shadow duration-300 group cursor-pointer"
+            className="flex bg-white rounded-2xl shadow-md hover:shadow-xl transition p-4 cursor-pointer"
             onClick={() => navigate(`/game/${game.game_id}`)}
           >
-            <div className="relative">
-              <img
-                src={game.header_image}
-                alt={game.name}
-                className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              <div className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md">
-                <Heart className="text-[#ff4d6d] w-5 h-5 fill-[#ff4d6d]" />
+            <img
+              src={game.header_image}
+              alt={game.name}
+              className="w-48 h-28 object-cover rounded-xl mr-4"
+            />
+            <div className="flex flex-col justify-between w-full">
+              <div>
+                <h2 className="text-xl font-bold text-[#2C003E]">{game.name}</h2>
+                <p className="text-gray-600 text-sm mt-1 line-clamp-2">{game.short_description}</p>
               </div>
-            </div>
-            <div className="p-4">
-              <h3 className="text-lg font-bold text-[#2C003E] truncate">{game.name}</h3>
-              <p className="text-sm text-gray-600 mt-1 line-clamp-2">
-                {game.short_description}
-              </p>
-              <p className="text-xs text-gray-400 mt-3">
-                Lançado em: {new Date(game.release_date).toLocaleDateString()}
-              </p>
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-xs text-gray-400">
+                  Lançamento: {new Date(game.release_date).toLocaleDateString()}
+                </span>
+                <Heart className="text-[#FF4D4D] w-5 h-5 fill-[#FF4D4D]" />
+              </div>
             </div>
           </div>
         ))}

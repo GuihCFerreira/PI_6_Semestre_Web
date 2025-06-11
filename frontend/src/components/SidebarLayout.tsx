@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../services/AuthContext';
-import logo from '../assets/logo.png'; // ajuste o caminho se necessário
+import logo from '../assets/logo.png';
 
 const SidebarLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { logout } = useAuth();
@@ -28,24 +28,22 @@ const SidebarLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      {/* Sidebar */}
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+      {/* Sidebar fixa */}
       <div style={{
         width: 220,
-        backgroundColor: '#FCFCFC',
-        color: '#FFF',
+        backgroundColor: '#4A2A6A',
         padding: '20px',
         display: 'flex',
         flexDirection: 'column',
         gap: '12px',
         boxShadow: '2px 0 8px rgba(0,0,0,0.1)',
+        flexShrink: 0
       }}>
-        {/* Logo */}
         <div style={{ marginBottom: 20, textAlign: 'center' }}>
           <img src={logo} alt="Logo iPlay" style={{ width: '100%', maxWidth: 120, height: 'auto', margin: '0 auto' }} />
         </div>
 
-        {/* Links */}
         <Link
           to="/profile"
           style={{ ...navButtonStyle(isActive('/profile')) }}
@@ -73,7 +71,6 @@ const SidebarLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           Favoritos
         </Link>
 
-        {/* Logout */}
         <button
           onClick={logout}
           style={{
@@ -93,8 +90,13 @@ const SidebarLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         </button>
       </div>
 
-      {/* Conteúdo */}
-      <div style={{ flex: 1, padding: '24px', backgroundColor: '#59B2FF' }}>
+      {/* Conteúdo com rolagem */}
+      <div style={{
+        flex: 1,
+        overflowY: 'auto',
+        padding: '24px',
+        backgroundColor: '#FCFCFC',
+      }}>
         {children}
       </div>
     </div>

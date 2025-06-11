@@ -9,6 +9,7 @@ import { useAuth } from "./services/AuthContext";
 import SidebarLayout from "./components/SidebarLayout";
 import GameDetails from "./pages/GameDetails";
 import FavoriteGamesPage from "./pages/FavoriteGamesPage";
+import './App.css';
 
 const AppRoutes = () => {
   const { token } = useAuth();
