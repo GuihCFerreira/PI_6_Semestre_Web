@@ -117,7 +117,7 @@ const Recommendation: React.FC = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill,minmax(250px,1fr))',
+          gridTemplateColumns: 'repeat(2, 1fr)',
           gap: 20
         }}
       >
@@ -153,7 +153,7 @@ const Recommendation: React.FC = () => {
                 fontWeight: 'bold',
                 alignSelf: 'flex-start'
               }}
-              onClick={() => window.open(`https://store.steampowered.com/app/${game.game_id}`, '_blank')}
+              onClick={() => navigate(`/game/${game.game_id}`)}
             >
               Ver Detalhes
             </button>
