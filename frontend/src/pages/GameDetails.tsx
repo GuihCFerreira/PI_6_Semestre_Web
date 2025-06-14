@@ -27,12 +27,10 @@ const GameDetails = () => {
   const [game, setGame] = useState<GameDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [favorited, setFavorited] = useState(false);
-  const [favoriteRecordId, setFavoriteRecordId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchGame = async () => {
       try {
-        // Busca detalhes do jogo
         const res = await api.get<GameDetail>(`/games/${id}`);
         setGame(res.data);
         setFavorited(res.data.is_favorite);
@@ -43,22 +41,8 @@ const GameDetails = () => {
       }
     };
 
-    // Buscar também o possível registro do favorito
-    const fetchFavoriteRecord = async () => {
-      if (!id) return;
-      try {
-        const favList = await api.get<any[]>('/games/favorite');
-        const rec = favList.data.find(f => f.game_id === game?.game_id);
-        if (rec) {
-          setFavoriteRecordId(rec.id);
-        }
-      } catch (err) {
-        console.error("Erro ao buscar registros de favoritos:", err);
-      }
-    };
-
-    fetchGame().then(fetchFavoriteRecord);
-  }, [id, game?.game_id]);
+    fetchGame();
+  }, [id]);
 
   const handleAddToFavorites = async () => {
     if (!game) return;
@@ -77,12 +61,9 @@ const GameDetails = () => {
   };
 
   const handleRemoveFromFavorites = async () => {
-    if (!favoriteRecordId) {
-      console.error("ID do favorito não encontrado, para remover");
-      return;
-    }
+    if (!game) return;
     try {
-      await api.delete(`/games/favorite/${favoriteRecordId}`);
+      await api.delete(`/games/favorite/${game.game_id}`);
       setFavorited(false);
     } catch (error) {
       console.error('Erro ao remover dos favoritos:', error);
@@ -103,10 +84,7 @@ const GameDetails = () => {
       <p><strong>Tags:</strong> {game.tags.join(', ')}</p>
 
       <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
-        <button
-          onClick={() => navigate('/recommendation')}
-          style={btnStyle('#ccc')}
-        >
+        <button onClick={() => navigate('/recommendation')} style={btnStyle('#ccc')}>
           Voltar
         </button>
 

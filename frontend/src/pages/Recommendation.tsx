@@ -1,4 +1,3 @@
-// pages/Recommendation.tsx
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
@@ -13,40 +12,41 @@ interface Game {
 
 const Recommendation: React.FC = () => {
   const navigate = useNavigate();
-
-  const handleNewQuiz = () => {
-    navigate('/quiz'); // redireciona de volta ao quiz
-  };
   const [recommendations, setRecommendations] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const handleNewQuiz = () => {
+    navigate('/quiz');
+  };
 
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
         const res = await api.get<Game[]>('/games/recomendations');
         setRecommendations(res.data);
-      } catch (err) {
-        console.error('Erro ao buscar recomendações:', err);
-        setError('Erro ao carregar recomendações');
+      } catch (err: any) {
+        if (err.response?.status === 404) {
+          navigate('/quiz'); // redireciona se não houver quiz feito ainda
+        } else {
+          console.error('Erro ao buscar recomendações:', err);
+          setError('Erro ao carregar recomendações');
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchRecommendations();
-  }, []);
+  }, [navigate]);
 
   if (loading) return <div style={{ textAlign: 'center', marginTop: 40 }}>Carregando recomendações...</div>;
   if (error) return <div style={{ color: 'red', textAlign: 'center', marginTop: 40 }}>{error}</div>;
   if (recommendations.length === 0) return <div style={{ textAlign: 'center', marginTop: 40 }}>Nenhuma recomendação disponível.</div>;
 
-  // Primeiro jogo como principal recomendado
   const mainGame = recommendations[0];
-  // Outros jogos (exceto o primeiro)
   const otherGames = recommendations.slice(1);
 
-  // Formatar data release para algo mais legível
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
@@ -55,18 +55,16 @@ const Recommendation: React.FC = () => {
   return (
     <div style={{ maxWidth: 900, margin: '20px auto', padding: '0 15px', fontFamily: 'Arial, sans-serif' }}>
       <h2 style={{ color: '#2C003E', marginBottom: 16 }}>Jogo Recomendado</h2>
-      <div
-        style={{
-          display: 'flex',
-          gap: 20,
-          backgroundColor: '#fff',
-          padding: 20,
-          borderRadius: 16,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          marginBottom: 40,
-          alignItems: 'center'
-        }}
-      >
+      <div style={{
+        display: 'flex',
+        gap: 20,
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 16,
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        marginBottom: 40,
+        alignItems: 'center'
+      }}>
         <img
           src={mainGame.header_image}
           alt={mainGame.name}
@@ -113,27 +111,21 @@ const Recommendation: React.FC = () => {
         </button>
       </h3>
 
-
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 20
-        }}
-      >
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: 20
+      }}>
         {otherGames.map((game) => (
-          <div
-            key={game.game_id}
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: 16,
-              padding: 16,
-              boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between'
-            }}
-          >
+          <div key={game.game_id} style={{
+            backgroundColor: '#fff',
+            borderRadius: 16,
+            padding: 16,
+            boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between'
+          }}>
             <img
               src={game.header_image}
               alt={game.name}
